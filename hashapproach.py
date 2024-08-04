@@ -31,6 +31,16 @@ def find_lookalikes(user_features, celebrity_attributes):
     lookalikes.sort(key=lambda x: x[1], reverse=True)
     return lookalikes
 
+# load an image using PIL and convert it to a format usable by pygame
+def load_image(image_path):
+    pil_image = Image.open(image_path)
+    pil_image = pil_image.resize((200, 200))  # Resize if needed
+    mode = pil_image.mode
+    size = pil_image.size
+    data = pil_image.tobytes()
+
+    return pygame.image.fromstring(data, size, mode)
+
 # GUI to get user input and display results
 def main():
     celeb_attributes = load_attributes('list_attr_celeba.csv')
