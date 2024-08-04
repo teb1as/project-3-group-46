@@ -1,6 +1,6 @@
+import tkinter as tk
+from gui import CelebLookalikeGUI
 import csv
-import pygame
-from PIL import Image
 import os
 
 
@@ -15,10 +15,10 @@ def load_attributes(file_path):
     return attributes
 
 
-# graph implementation
+# graph implementation using dictionaries
 class CelebrityGraph:
     def __init__(self):
-        self.graph = {}  # initialize empty dictionary to store the graph
+        self.graph = {}
 
     def add_node(self, celeb_id):
         if celeb_id not in self.graph:
@@ -36,7 +36,7 @@ class CelebrityGraph:
         for neighbor, weight in self.graph.get(celeb_id_1, []):
             if neighbor == celeb_id_2:
                 return weight
-        return None  # no direct connection found
+        return None
 
 
 # calculate similarity
@@ -55,73 +55,39 @@ def find_lookalikes(user_features, celebrity_attributes, celeb_graph):
         similarity = calculate_similarity(user_features, celeb_features)
         lookalikes.append((celeb_id, similarity))
         celeb_graph.add_node(celeb_id)
-        celeb_graph.add_edge('user', celeb_id, similarity)  # connect user to celebrities based on similarity
+        celeb_graph.add_edge('user', celeb_id, similarity)
     lookalikes.sort(key=lambda x: x[1], reverse=True)
     return lookalikes
 
 
-# load an image using PIL and convert it to a format usable by pygame
-def load_image(image_path):
-    pil_image = Image.open(image_path)
-    pil_image = pil_image.resize((200, 200))  # Resize if needed
-    mode = pil_image.mode
-    size = pil_image.size
-    data = pil_image.tobytes()
-
-    return pygame.image.fromstring(data, size, mode)
-
-
-# GUI to get user input and display results
+# main function to run the application
 def main():
+    # load celebrity data
     celeb_attributes = load_attributes('list_attr_celeba.csv')
     image_dir = 'img_align_celeba'
 
     # initialize the graph
     celeb_graph = CelebrityGraph()
 
-    # initialize pygame
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-    pygame.display.set_caption("Celeb Lookalike")
+    # Create the main window and the GUI
+    root = tk.Tk()
+    gui = CelebLookalikeGUI(root)
 
-    # example
-    user_input = {
-        'Bald': False,
-        'Eyeglasses': False,
-        'Male': True,
-        # etc
-    }
+    def update_image():
+        # get user input and find lookalikes
+        user_input = gui.get_user_input()
+        lookalikes = find_lookalikes(user_input, celeb_attributes, celeb_graph)
+        if lookalikes:
+            first_match = lookalikes[0][0]
+            img_path = os.path.join(image_dir, first_match)
+            if os.path.exists(img_path):
+                gui.update_image(img_path)
 
-    # add user as a node in the graph
-    celeb_graph.add_node('user')
+    # button to trigger the update image action
+    tk.Button(root, text="Find Lookalike", command=update_image).grid(column=1, row=4, padx=10, pady=10)
 
-    # find lookalikes
-    lookalikes = find_lookalikes(user_input, celeb_attributes, celeb_graph)
-
-    # load the first matchs image for display
-    if lookalikes:
-        first_match = lookalikes[0][0]
-        img_path = os.path.join(image_dir, first_match)
-        image = load_image(img_path)
-    else:
-        image = None
-
-    # GUI loop
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-        screen.fill((255, 255, 255))  # White background
-
-        # display the image on the screen if it exists
-        if image:
-            screen.blit(image, (300, 200))  # image position on screen
-
-        pygame.display.flip()  # update the display
-
-    pygame.quit()
+    # start the GUI event loop
+    root.mainloop()
 
 
 if __name__ == "__main__":
