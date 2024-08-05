@@ -84,7 +84,7 @@ def main():
                 gui.update_image(img_path)
 
     # button to trigger the update image action
-    tk.Button(root, text="Find Lookalike", command=update_image).grid(column=1, row=4, padx=10, pady=10)
+    tk.Button(root, text="Find Lookalike", command=update_image).grid(column=1, row=5, padx=10, pady=10)
 
     # start the GUI event loop
     root.mainloop()
