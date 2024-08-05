@@ -26,7 +26,7 @@ class CelebLookalikeGUI:
         self.title_label.pack(pady=20)
 
         # create a frame for the comboboxes and color it
-        self.left_frame = tk.Frame(self.root, bg="dimgray", width=350, height=400)
+        self.left_frame = tk.Frame(self.root, bg="dimgray", width=350, height=550)
         self.left_frame.place(x=50, y=150)
 
         # combobox options for different attributes
@@ -56,7 +56,7 @@ class CelebLookalikeGUI:
         self.facial_hair_combobox = create_combobox(self.left_frame, "Facial Hair", self.facial_hair_options, 1)
         self.hair_color_combobox = create_combobox(self.left_frame, "Hair Color", self.hair_color_options, 2)
         self.accessories_combobox = create_combobox(self.left_frame, "Accessories", self.accessories_options, 3)
-
+        self.additional_features_combobox = create_combobox(self.left_frame, "Additional Features", self.additional_features_options, 4)
         # placeholder for the displayed image
         self.canvas2 = tk.Canvas(self.root, width=500, height=500)
         self.canvas2.place(x=675, y=150)
