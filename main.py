@@ -39,7 +39,7 @@ class CelebrityGraph:
         return None
 
 
-# calculate similarity
+# calculate similarity (Hamming distance)
 def calculate_similarity(user_features, celeb_features):
     score = 0
     for feature, value in user_features.items():
@@ -60,7 +60,6 @@ def find_lookalikes(user_features, celebrity_attributes, celeb_graph):
     return lookalikes
 
 
-# main function to run the application
 def main():
     # load celebrity data
     celeb_attributes = load_attributes('list_attr_celeba.csv')
@@ -69,7 +68,7 @@ def main():
     # initialize the graph
     celeb_graph = CelebrityGraph()
 
-    # Create the main window and the GUI
+    # create the main window and the GUI
     root = tk.Tk()
     gui = CelebLookalikeGUI(root)
 
@@ -84,8 +83,8 @@ def main():
                 gui.update_image(img_path)
 
     # button to trigger the update image action
-    tk.Button(root, text="Find Lookalike", command=update_image).grid(column=1, row=4, padx=10, pady=10)
-
+    find_button = tk.Button(root, text="Find Lookalike", command=update_image, font=("Arial", 14), width=20, height=2)
+    find_button.place(x=50, y=342)
     # start the GUI event loop
     root.mainloop()
 
