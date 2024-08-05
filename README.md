@@ -10,7 +10,7 @@ for storing the celebrity data, as it allows for quick lookups.
 
 ##Use: 
 
-After running either main.py or hashapproach.py, a gui is opened where the user inputs data about their physical 
+After running main.py, a gui is opened where the user inputs data about their physical 
 features. (finish this)
 
 ##Credits:
