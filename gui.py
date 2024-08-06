@@ -24,8 +24,8 @@ class CelebLookalikeGUI:
         self.canvas = tk.Canvas(self.root, width=250, height=100)
         self.canvas.place(x=50, y=600)
         self.canvas.create_rectangle(0, 0, 500, 500, fill="dimgray")
-        self.canvas.create_text(10, 50, text="Project by Dylan Everett,\nTavian Douge,\nAnd Mark Cortez",
-                                font=("Arial", 14), fill="white", anchor=tk.W)
+        self.canvas.create_text(10, 50, text="Project by Dylan Everett,\nTavian Douge,\nand Mark Cortez",
+                                font=("Arial", 15), fill="black", anchor=tk.W)
 
         # title label
         self.title_label = tk.Label(self.root, text="CELEB LOOK-ALIKE", font=("Arial", 30), bg="darkslategray",
@@ -42,6 +42,12 @@ class CelebLookalikeGUI:
         self.facial_hair_options = ['5_o_Clock_Shadow', 'Goatee', 'Mustache', 'No Beard']
         self.hair_color_options = ['Black Hair', 'Blond Hair', 'Brown Hair', 'Gray Hair']
         self.accessories_options = ['Eyeglasses', 'Wearing Hat', 'Wearing Earrings']
+        self.additional_features_options = [
+            'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Big Lips', 'Big Nose', 'Blurry',
+            'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Heavy Makeup', 'High Cheekbones',
+            'Mouth Slightly Open', 'Narrow Eyes', 'Oval Face', 'Pale Skin', 'Pointy Nose',
+            'Rosy Cheeks', 'Sideburns', 'Smiling', 'Young'
+        ]
 
         # create comboboxes for attribute selection
         self.gender_combobox = create_combobox(self.left_frame, "Gender", self.gender_options, 0)
@@ -49,7 +55,8 @@ class CelebLookalikeGUI:
         self.facial_hair_combobox = create_combobox(self.left_frame, "Facial Hair", self.facial_hair_options, 2)
         self.hair_color_combobox = create_combobox(self.left_frame, "Hair Color", self.hair_color_options, 3)
         self.accessories_combobox = create_combobox(self.left_frame, "Accessories", self.accessories_options, 4)
-
+        self.additional_features_combobox = create_combobox(self.left_frame, "Additional Features",
+                                                            self.additional_features_options, 5)
         # placeholder for the displayed image
         self.canvas2 = tk.Canvas(self.root, width=500, height=500)
         self.canvas2.place(x=675, y=150)
@@ -82,15 +89,38 @@ class CelebLookalikeGUI:
             'Receding_Hairline': self.hairstyle_combobox.get() == 'Receding Hairline',
             'Straight_Hair': self.hairstyle_combobox.get() == 'Straight Hair',
             'Wavy_Hair': self.hairstyle_combobox.get() == 'Wavy Hair',
-            '5_o_Clock_Shadow': self.facial_hair_combobox.get() == '5_o_Clock_Shadow',
-            'Goatee': self.facial_hair_combobox.get() == 'Goatee',
-            'Mustache': self.facial_hair_combobox.get() == 'Mustache',
-            'No_Beard': self.facial_hair_combobox.get() == 'No Beard',
             'Black_Hair': self.hair_color_combobox.get() == 'Black Hair',
             'Blond_Hair': self.hair_color_combobox.get() == 'Blond Hair',
             'Brown_Hair': self.hair_color_combobox.get() == 'Brown Hair',
             'Gray_Hair': self.hair_color_combobox.get() == 'Gray Hair',
+            '5_o_Clock_Shadow': self.facial_hair_combobox.get() == '5_o_Clock_Shadow',
+            'Goatee': self.facial_hair_combobox.get() == 'Goatee',
+            'Mustache': self.facial_hair_combobox.get() == 'Mustache',
+            'No_Beard': self.facial_hair_combobox.get() == 'No Beard',
             'Eyeglasses': self.accessories_combobox.get() == 'Eyeglasses',
             'Wearing_Hat': self.accessories_combobox.get() == 'Wearing Hat',
-            'Wearing_Earrings': self.accessories_combobox.get() == 'Wearing Earrings'
+            'Wearing_Earrings': self.accessories_combobox.get() == 'Wearing Earrings',
+            'Wearing_Lipstick': self.accessories_combobox.get() == 'Wearing Lipstick',
+            'Wearing_Necklace': self.accessories_combobox.get() == 'Wearing Necklace',
+            'Wearing_Necktie': self.accessories_combobox.get() == 'Wearing Necktie',
+            'Arched_Eyebrows': self.additional_features_combobox.get() == 'Arched Eyebrows',
+            'Attractive': self.additional_features_combobox.get() == 'Attractive',
+            'Bags_Under_Eyes': self.additional_features_combobox.get() == 'Bags Under Eyes',
+            'Big_Lips': self.additional_features_combobox.get() == 'Big Lips',
+            'Big_Nose': self.additional_features_combobox.get() == 'Big Nose',
+            'Blurry': self.additional_features_combobox.get() == 'Blurry',
+            'Bushy_Eyebrows': self.additional_features_combobox.get() == 'Bushy Eyebrows',
+            'Chubby': self.additional_features_combobox.get() == 'Chubby',
+            'Double_Chin': self.additional_features_combobox.get() == 'Double Chin',
+            'Heavy_Makeup': self.additional_features_combobox.get() == 'Heavy Makeup',
+            'High_Cheekbones': self.additional_features_combobox.get() == 'High Cheekbones',
+            'Mouth_Slightly_Open': self.additional_features_combobox.get() == 'Mouth Slightly Open',
+            'Narrow_Eyes': self.additional_features_combobox.get() == 'Narrow Eyes',
+            'Oval_Face': self.additional_features_combobox.get() == 'Oval Face',
+            'Pale_Skin': self.additional_features_combobox.get() == 'Pale Skin',
+            'Pointy_Nose': self.additional_features_combobox.get() == 'Pointy Nose',
+            'Rosy_Cheeks': self.additional_features_combobox.get() == 'Rosy Cheeks',
+            'Sideburns': self.additional_features_combobox.get() == 'Sideburns',
+            'Smiling': self.additional_features_combobox.get() == 'Smiling',
+            'Young': self.additional_features_combobox.get() == 'Young'
         }

@@ -84,7 +84,7 @@ def main():
 
     # button to trigger the update image action
     find_button = tk.Button(root, text="Find Lookalike", command=update_image, font=("Arial", 14), width=20, height=2)
-    find_button.place(x=50, y=391)
+    find_button.place(x=50, y=439)
     # start the GUI event loop
     root.mainloop()
 
