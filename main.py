@@ -3,7 +3,6 @@ from gui import CelebLookalikeGUI
 import csv
 import os
 
-
 # HashMap: storing celebrity attributes
 def load_attributes(file_path):
     attributes = {}
@@ -13,7 +12,6 @@ def load_attributes(file_path):
             celeb_id = row['image_id']
             attributes[celeb_id] = {key: (value == '1') for key, value in row.items() if key != 'image_id'}
     return attributes
-
 
 # graph implementation using dictionaries
 class CelebrityGraph:
@@ -36,8 +34,7 @@ class CelebrityGraph:
         for neighbor, weight in self.graph.get(celeb_id_1, []):
             if neighbor == celeb_id_2:
                 return weight
-        return None
-
+        return
 
 # calculate similarity (Hamming distance)
 def calculate_similarity(user_features, celeb_features):
@@ -46,7 +43,6 @@ def calculate_similarity(user_features, celeb_features):
         if celeb_features.get(feature) == value:
             score += 1
     return score
-
 
 # find lookalikes based on similarity
 def find_lookalikes(user_features, celebrity_attributes, celeb_graph):
@@ -58,7 +54,6 @@ def find_lookalikes(user_features, celebrity_attributes, celeb_graph):
         celeb_graph.add_edge('user', celeb_id, similarity)
     lookalikes.sort(key=lambda x: x[1], reverse=True)
     return lookalikes
-
 
 def main():
     # load celebrity data
@@ -72,9 +67,35 @@ def main():
     root = tk.Tk()
     gui = CelebLookalikeGUI(root)
 
+    hair_color_percentages = {
+        'Blond Hair': 29983/202599,
+        'Black Hair': 48472/202599,
+        'Brown Hair': 41572/202599,
+        'Gray Hair': 8499/202599
+    }
+
+    gender_percentages = {
+        'Male': 84434/202599,
+        'Female': 118165/202599
+    }
+
+    facial_hair_percentages = {
+        '5 o Clock Shadow': 22516/202599,
+        'Goatee': 12716/202599,
+        'Mustache': 8417/202599,
+        'No Beard': 169158/202599
+    }
+
+    similarity_label = tk.Label(root, text="", font=("Arial", 14), bg="darkslategray", fg="white")
+    similarity_label.place(x=50, y=500)
+
     def update_image():
-        # get user input and find lookalikes
+        # get user input
         user_input = gui.get_user_input()
+        hair_color = None
+        male_or_female = None
+        facial_hair = None
+
         lookalikes = find_lookalikes(user_input, celeb_attributes, celeb_graph)
         if lookalikes:
             first_match = lookalikes[0][0]
@@ -82,12 +103,31 @@ def main():
             if os.path.exists(img_path):
                 gui.update_image(img_path)
 
+        # Determine the selected hair color
+        for color, selected in user_input.items():
+            if selected and color.replace('_', ' ') in hair_color_percentages:
+                hair_color = color.replace('_', ' ')
+                break
+        
+        # Determine gender
+        male_or_female = 'Male' if user_input['Male'] == 1 else 'Female'
+        
+        # Determine facial hair
+        for style, selected in user_input.items():
+            if selected and style.replace('_', ' ') in facial_hair_percentages:
+                facial_hair = style.replace('_', ' ')
+                break
+
+        # Update the similarity percentage based on most prominent physical features
+        similarity_percentage = hair_color_percentages.get(hair_color, 0.0)*gender_percentages.get(male_or_female, 0.0)\
+        *facial_hair_percentages.get(facial_hair, 0.0) * 100
+        similarity_label.config(text=f"You look like {similarity_percentage:.2f}% of celebrities")
+
     # button to trigger the update image action
     find_button = tk.Button(root, text="Find Lookalike", command=update_image, font=("Arial", 14), width=20, height=2)
     find_button.place(x=50, y=439)
     # start the GUI event loop
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
