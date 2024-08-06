@@ -58,6 +58,7 @@ def find_lookalikes(user_features, celebrity_attributes, celeb_graph):
 def calculate_similarity_percentage(user_features, celeb_features):
     matching_features = 0
     total_features = len(user_features)
+    # iterate through selection to find matches
     for feature, value in user_features.items():
         if celeb_features.get(feature) == value:
             matching_features += 1
@@ -66,7 +67,6 @@ def calculate_similarity_percentage(user_features, celeb_features):
     if total_features == 0:
         return 0.0  # Avoid division by zero if no features provided
     similarity_percentage = (matching_features / total_features) * 100
-    print(similarity_percentage)
     return similarity_percentage
 
 def main():
@@ -100,6 +100,7 @@ def main():
         'No Beard': 169158/202599
     }
 
+    # create text labels for similarity and match percentages
     similarity_label = tk.Label(root, text="", font=("Arial", 14), bg="darkslategray", fg="white")
     similarity_label.place(x=50, y=500)
     match_percentage_label = tk.Label(root, text="", font=("Arial", 14), bg="darkslategray", fg="white")
@@ -112,6 +113,7 @@ def main():
         male_or_female = None
         facial_hair = None
 
+        # find lookalike based on user input
         lookalikes = find_lookalikes(user_input, celeb_attributes, celeb_graph)
         if lookalikes:
             first_match = lookalikes[0][0]
@@ -119,9 +121,11 @@ def main():
             if os.path.exists(img_path):
                 gui.update_image(img_path)
 
+        # get attributes and calculate match percentage
         first_lookalike_attributes = celeb_attributes.get(first_match)
         match_percentage = calculate_similarity_percentage(user_input, first_lookalike_attributes)
         match_percentage_label.config(text=f"Best Match: {match_percentage:.2f}%")
+
         # Determine the selected hair color
         for color, selected in user_input.items():
             if selected and color.replace('_', ' ') in hair_color_percentages:
